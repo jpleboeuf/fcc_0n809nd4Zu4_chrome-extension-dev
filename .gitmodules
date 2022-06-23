@@ -1,0 +1,6 @@
+[submodule "courseware/code/youtube-bookmarker-starter-code"]
+	path = courseware/code/youtube-bookmarker-starter-code
+	url = https://github.com/raman-at-pieces/youtube-bookmarker-starter-code
+[submodule "courseware/code/youtube-bookmarker-finished-code"]
+	path = courseware/code/youtube-bookmarker-finished-code
+	url = https://github.com/raman-at-pieces/youtube-bookmarker-finished-code
