@@ -43,10 +43,51 @@ const newYouTubeVideoPageReadyEventHandler = () => {
     console.groupEnd();
 }
 
+const convSecondsToDHMS = (seconds) => {
+    console.group("convSecondsToDHMS");
+
+    const SECONDS_IN_1_MIN = 60;
+    const SECONDS_IN_1_HOUR = SECONDS_IN_1_MIN * 60;
+    const SECONDS_IN_1_DAY = SECONDS_IN_1_HOUR * 24;
+
+    let d = Math.floor(seconds/SECONDS_IN_1_DAY);
+    //console.log("d:= " + d);
+    seconds -= d*SECONDS_IN_1_DAY;
+    let h = Math.floor(seconds/SECONDS_IN_1_HOUR);
+    //console.log("h:= " + h);
+    seconds -= h*SECONDS_IN_1_HOUR;
+    let m = Math.floor(seconds/SECONDS_IN_1_MIN);
+    //console.log("m:= " + m);
+    seconds -= m*SECONDS_IN_1_MIN;
+    let s = Math.floor(seconds);
+    //console.log("s:= " + s);
+
+    let dhmsStr = d.toString().padStart(2, "0")
+          + ":" + h.toString().padStart(2, "0")
+          + ":" + m.toString().padStart(2, "0")
+          + ":" + s.toString().padStart(2, "0");
+    //console.log("dhmsStr:= " + dhmsStr);
+
+    /* The YouTube player displays only the h- and m- parts, when the other parts can be discarded: */
+    let c = 2
+    while (dhmsStr.substring(0,3) === "00:" && c > 0) {
+        dhmsStr = dhmsStr.substring(3);
+        c -= 1;
+    }
+    //console.log("dhmsStr:= " + dhmsStr);
+
+    /* The YouTube player does not display the leading zero: */
+    dhmsStr = (dhmsStr.substring(0,1) === "0") ? dhmsStr.substring(1) : dhmsStr;
+    //console.log("dhmsStr:= " + dhmsStr);
+
+    console.groupEnd();
+    return dhmsStr;
+}
+
 const addBookmarkEventHandler = () => {
     console.group("addBookmarkEventHandler");
-    let currentVideoTime = ytpVideo.currentTime;
-    console.log("currentVideoTime:= " + currentVideoTime);
+    let currentVideoDHMSTime = convSecondsToDHMS(ytpVideo.currentTime);
+    console.log("currentVideoDHMSTime:= " + currentVideoDHMSTime);
     console.groupEnd();
 }
 
