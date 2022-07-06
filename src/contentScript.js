@@ -3,6 +3,7 @@
 console.log("content-script!");
 
 let currentVideo = "";
+let currentVideoBookmarks = [];
 
 let ytpVideo, ytpLeftControls;
 
@@ -88,6 +89,23 @@ const addBookmarkEventHandler = () => {
     console.group("addBookmarkEventHandler");
     let currentVideoDHMSTime = convSecondsToDHMS(ytpVideo.currentTime);
     console.log("currentVideoDHMSTime:= " + currentVideoDHMSTime);
+
+    const newBookmark = {
+        time: ytpVideo.currentTime,
+        desc: "Bookmark at " + currentVideoDHMSTime
+    };
+    currentVideoBookmarks = [...currentVideoBookmarks, newBookmark].sort((a, b) => a.time-b.time)
+    console.log("currentVideoBookmarks:= ", currentVideoBookmarks);
+    chrome.storage.local.set(
+        {[currentVideo]: JSON.stringify(currentVideoBookmarks)},  // `[currentVideo]` is a computed property name.
+        () => {
+            console.log("New bookmark added to storage!");
+            chrome.storage.local.get(null, function(stor) {
+                console.log("Bookmarks currently in storage for the current video: ", stor[currentVideo]);
+            });
+        }
+    );
+
     console.groupEnd();
 }
 
