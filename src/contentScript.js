@@ -16,9 +16,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }      
 });
 
-const newYouTubeVideoPage = () => {
+const newYouTubeVideoPage = async () => {
     console.group("newYouTubeVideoPage");
     console.log("currentVideo:= " + currentVideo);
+    /* Load the list of stored bookmarks for the current video: */
+    currentVideoBookmarks = await fetchBookmarks();
     document.addEventListener("DOMContentLoaded", newYouTubeVideoPageReadyEventHandler, false);
     console.groupEnd();
 };
@@ -85,11 +87,15 @@ const convSecondsToDHMS = (seconds) => {
     return dhmsStr;
 }
 
-const addBookmarkEventHandler = () => {
+const addBookmarkEventHandler = async () => {
     console.group("addBookmarkEventHandler");
     let currentVideoDHMSTime = convSecondsToDHMS(ytpVideo.currentTime);
     console.log("currentVideoDHMSTime:= " + currentVideoDHMSTime);
 
+    /* Refresh the list of bookmarks before adding a new one: */
+    currentVideoBookmarks = await fetchBookmarks();
+
+    console.log("Adding a new bookmark...")
     const newBookmark = {
         time: ytpVideo.currentTime,
         desc: "Bookmark at " + currentVideoDHMSTime
@@ -107,6 +113,18 @@ const addBookmarkEventHandler = () => {
     );
 
     console.groupEnd();
+}
+
+const fetchBookmarks = () => {
+    return new Promise((resolve) => {
+        chrome.storage.local.get(currentVideo, (currentVideoBookmarksKVFromStor) => {
+            const currentVideoBookmarksFromStor =
+                (currentVideoBookmarksKVFromStor[currentVideo] ?
+                    JSON.parse(currentVideoBookmarksKVFromStor[currentVideo]) : []);
+            console.log("Bookmarks fetched from storage for the current video: ", currentVideoBookmarksFromStor);
+            resolve(currentVideoBookmarksFromStor);
+        })
+    });
 }
 
 //})();
