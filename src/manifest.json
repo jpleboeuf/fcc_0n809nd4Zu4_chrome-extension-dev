@@ -19,7 +19,8 @@
         "matches": ["https://*.youtube.com/*"],
         "resources": [
           "assets/bookmark.png",
-          "assets/play.png"
+          "assets/play.png",
+          "assets/delete.png"
         ]
       }
     ],

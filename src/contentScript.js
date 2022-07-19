@@ -15,6 +15,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({type: "NEW-ok"});
     } else if (type === "PLAY") {
         ytpVideo.currentTime = value;
+    } else if (type === "DELETE") {
+        currentVideoBookmarks = currentVideoBookmarks.filter((b) => b.time != value);
+        /* TODO: factor this block of code. */
+        chrome.storage.local.set(
+            {[currentVideo]: JSON.stringify(currentVideoBookmarks)},  // `[currentVideo]` is a computed property name.
+            () => {
+                console.log("Bookmark removed from storage!");
+                chrome.storage.local.get(null, function(stor) {
+                    console.log("Bookmarks currently in storage for the current video: ", stor[currentVideo]);
+                });
+            }
+        );
+        /* --- */
+        sendResponse(currentVideoBookmarks);
     }
 });
 
