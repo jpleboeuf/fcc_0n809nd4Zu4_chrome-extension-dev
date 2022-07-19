@@ -13,3 +13,18 @@
     margin: 5px 5px;
     padding: 3px;
 }
+
+.bookmark {
+    display: flex;
+    border-bottom-color: #00254d;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-radius: 0.8rem;
+    padding: 3px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+}
+
+.bookmark-title {
+    padding-left: 2px;
+}

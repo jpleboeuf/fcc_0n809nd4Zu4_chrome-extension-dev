@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 (currentVideoBookmarksKVFromStor[videoId] ?
                     JSON.parse(currentVideoBookmarksKVFromStor[videoId]) : []);
             console.log("Bookmarks fetched from storage for the current video: ", currentVideoBookmarksFromStor);
-            // viewBookmarks ( currentVideoBookmarksFromStor )
+            viewBookmarks(currentVideoBookmarksFromStor);
         });
         /* --- */
     } else {
@@ -24,3 +24,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     /* --- */
 });
+
+const viewBookmarks = (currentVideoBookmarks=[]) => {
+    const bookmarksElement = document.getElementById('bookmarks');
+    bookmarksElement.innerHTML = '';
+    if (currentVideoBookmarks.length > 0) {
+        for (let i = 0; i < currentVideoBookmarks.length; i++) {
+            const bookmark = currentVideoBookmarks[i];
+            addBookmarkToView(bookmarksElement, bookmark);
+        }
+    } else {
+        bookmarksElement.innerHTML = '<em class="bookmark-row">No bookmarks to show.</em>';
+    }
+};
+
+const addBookmarkToView = (bookmarksElement, bookmark) => {
+    const bookMarkTitleElement = document.createElement('div');
+    const newBookmarkElement = document.createElement('div');
+    bookMarkTitleElement.textContent = bookmark.desc;
+    bookMarkTitleElement.className = 'bookmark-title';
+    newBookmarkElement.id = 'bookmark-' + bookmark.time;
+    newBookmarkElement.className = 'bookmark';
+    newBookmarkElement.setAttribute('timestamp', bookmark.time);
+    newBookmarkElement.appendChild(bookMarkTitleElement);
+
+    bookmarksElement.appendChild(newBookmarkElement);
+};
