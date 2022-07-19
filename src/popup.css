@@ -28,3 +28,15 @@
 .bookmark-title {
     padding-left: 2px;
 }
+
+.bookmark-controls img {
+    margin: 0 4px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+.bookmark-controls {
+    flex: auto;
+    text-align: right;
+}

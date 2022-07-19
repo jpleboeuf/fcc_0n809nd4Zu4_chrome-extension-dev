@@ -8,12 +8,14 @@ let currentVideoBookmarks = [];
 let ytpVideo, ytpLeftControls;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    const { type, videoId } = request;
+    const { type, value, videoId } = request;
     if (type === "NEW") {
         currentVideo = videoId;
         newYouTubeVideoPage();
         sendResponse({type: "NEW-ok"});
-    }      
+    } else if (type === "PLAY") {
+        ytpVideo.currentTime = value;
+    }
 });
 
 const newYouTubeVideoPage = async () => {

@@ -18,7 +18,8 @@
       {
         "matches": ["https://*.youtube.com/*"],
         "resources": [
-          "assets/bookmark.png"
+          "assets/bookmark.png",
+          "assets/play.png"
         ]
       }
     ],

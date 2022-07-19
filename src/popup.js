@@ -41,12 +41,33 @@ const viewBookmarks = (currentVideoBookmarks=[]) => {
 const addBookmarkToView = (bookmarksElement, bookmark) => {
     const bookMarkTitleElement = document.createElement('div');
     const newBookmarkElement = document.createElement('div');
+    const newBookmarkControlsElement = document.createElement('div');
     bookMarkTitleElement.textContent = bookmark.desc;
     bookMarkTitleElement.className = 'bookmark-title';
     newBookmarkElement.id = 'bookmark-' + bookmark.time;
     newBookmarkElement.className = 'bookmark';
     newBookmarkElement.setAttribute('timestamp', bookmark.time);
     newBookmarkElement.appendChild(bookMarkTitleElement);
+    newBookmarkControlsElement.className = 'bookmark-controls';
+    addActionToBookmarkControls('play', onPlay, newBookmarkControlsElement);
+    newBookmarkElement.appendChild(newBookmarkControlsElement);
 
     bookmarksElement.appendChild(newBookmarkElement);
+};
+
+const addActionToBookmarkControls = (action, eventListener, controlParentElement) => {
+    const controlElement = document.createElement('img');
+    controlElement.src = 'assets/' + action + '.png';
+    controlElement.title = action;
+    controlElement.addEventListener('click', eventListener);
+    controlParentElement.appendChild(controlElement);
+};
+
+const onPlay = async ev => {
+    const bookmarkTimestamp = ev.target.parentNode.parentNode.getAttribute('timestamp');  // !!
+    const currentTab = await getCurrentTab();
+    chrome.tabs.sendMessage(currentTab.id, {
+        type: "PLAY",
+        value: bookmarkTimestamp
+    });
 };
